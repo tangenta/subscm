@@ -54,7 +54,9 @@ public class Util {
                     .map(Util::format)
                     .collect(Collectors.joining(", ", "(", ")"));
         } else if (result instanceof Expr.ManySym) {
-            return "manySym";
+            return ((Expr.ManySym) result).value.stream()
+                    .map(Util::format)
+                    .collect(Collectors.joining(", "));
         } else if (result instanceof Expr.Nil) {
             return "nil";
         } else {
@@ -93,11 +95,6 @@ public class Util {
         return wrapAround("+", lens.stream()
                 .map(len -> many('-', len))
                 .collect(Collectors.joining("+")));
-    }
-
-    public static void main(String[] args) {
-        String s = contentLine(Arrays.asList("abc", "12", "4"), Arrays.asList(8, 5, 2));
-        System.out.println(s);
     }
 
     private static String contentLine(List<String> contents, List<Integer> maxLens) {

@@ -51,6 +51,7 @@ public class Application {
 
         Option fileOption = new Option("f", FILES, true, "Files to be parsed");
         fileOption.setRequired(false);
+        fileOption.setArgs(Option.UNLIMITED_VALUES);
         options.addOption(fileOption);
 
         Option roundOption = new Option("r", ROUNDS, true, "Duel rounds");
@@ -84,6 +85,8 @@ public class Application {
 
     private static String[] checkFilename(CommandLine cmd) {
         String[] fileNames = cmd.getOptionValues(FILES);
+        if (fileNames == null) return null;
+        System.out.println(Arrays.toString(fileNames));
         if (fileNames.length <= 1) {
             System.err.println("Multiple input files is needed");
             System.exit(1);
