@@ -1,6 +1,7 @@
 package com.tangenta.util;
 
 import com.tangenta.Strategy;
+import com.tangenta.common.Val;
 import com.tangenta.parser.result.Panic;
 import com.tangenta.common.Expr;
 
@@ -38,6 +39,26 @@ public class Util {
             return (Expr.Sym) expr;
         } else {
             throw Panic.msg("Expect symbol, actual: " + expr.getClass());
+        }
+    }
+
+    public static String format(Expr result) {
+        if (result instanceof Expr.Bool) {
+            return ((Expr.Bool) result).value.toString();
+        } else if (result instanceof Expr.Sym) {
+            return ((Expr.Sym) result).value;
+        } else if (result instanceof Expr.Num) {
+            return ((Expr.Num) result).value.toString();
+        } else if (result instanceof Expr.Lst) {
+            return ((Expr.Lst) result).value.stream()
+                    .map(Util::format)
+                    .collect(Collectors.joining(", ", "(", ")"));
+        } else if (result instanceof Expr.ManySym) {
+            return "manySym";
+        } else if (result instanceof Expr.Nil) {
+            return "nil";
+        } else {
+            return "unknown";
         }
     }
 

@@ -22,11 +22,19 @@ public interface Parser {
             throw Panic.msg(((ParseError)parseResult).errMsg);
         }
     }
+    default Expr parseUnwrapAndMute(String string) {
+        try {
+            return parseAndUnwrap(string);
+        } catch (Panic e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
 
     static Parser of(String match) {
         return string -> {
             String trim = Util.trimHead(string);
-            return trim.contains(match) && trim.substring(0, match.length()).equals(match) ?
+            return trim.length() >= match.length() && trim.substring(0, match.length()).equals(match) ?
                     ParseSuccess.of(new Expr.Sym(match), string.substring(match.length())) :
                     ParseError.of("Not match " + match + " in: " + trim);
         };
