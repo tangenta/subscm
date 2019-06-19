@@ -1,0 +1,6 @@
+(define stg5 (lambda ()
+  (if (forall other 1)
+    1
+    0)))
+
+(stg5)

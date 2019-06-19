@@ -1,0 +1,11 @@
+(define stg4 (lambda ()
+  (if (eq? (len other) 0)
+    1
+    (if (eq? (random 10) 9)
+      0
+      (last other)
+    )
+  )
+))
+
+(stg4)

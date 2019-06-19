@@ -1,0 +1,3 @@
+(define stg1 1)
+
+stg1

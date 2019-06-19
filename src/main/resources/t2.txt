@@ -1,0 +1,7 @@
+(define stg2 (lambda ()
+  (if (eq? (random 4) 3)
+    0
+    1)
+))
+
+(stg2)
