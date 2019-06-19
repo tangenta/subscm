@@ -12,11 +12,15 @@ import com.tangenta.util.Tuple;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// Strategy represent a strategy when playing a bit war game.
 public class Strategy {
     private static Parser programParser = Parser.program();
     private static Parser expParser = Parser.expression();
 
+    // the name of strategy.
     public final String name;
+
+    // the associated code of strategy.
     public final Expr code;
 
     private Strategy(String name, Expr code) {
@@ -28,6 +32,7 @@ public class Strategy {
         return new StrategyBuilder();
     }
 
+    // sortStrategies() compare different strategies with playing bit war for a number of rounds, and return a score result.
     public static List<Tuple<Strategy, Integer>> sortStrategies(List<Strategy> strategies, int rounds) {
         Map<Strategy, Integer> scoreMap = new HashMap<>();
 
@@ -52,6 +57,7 @@ public class Strategy {
                 .map(e -> Tuple.of(e.getKey(), e.getValue())).collect(Collectors.toList());
     }
 
+    // startDuel() compare two strategies in a number of rounds, and return both scores.
     public static Tuple<Integer, Integer> startDuel(Expr exp1, Expr exp2, Env env, int rounds) {
         Val.Lst own = new Val.Lst(new LinkedList<>());
         Val.Lst other = new Val.Lst(new LinkedList<>());
@@ -101,26 +107,34 @@ public class Strategy {
         return Tuple.of(score1, score2);
     }
 
+    // exec() evaluate code under some environment.
     public static void exec(String code, Env env) {
         Eval.eval(expParser.parseAndUnwrap(code), env);
     }
 
+    // StrategyBuilder is used for build a Strategy.
     public static class StrategyBuilder {
+        // the name of strategy.
         private String name;
+
+        // the associated code of strategy.
         private Expr code;
 
         private StrategyBuilder() {}
 
+        // name() specify the name of a strategy.
         public StrategyBuilder name(String name) {
             this.name = name;
             return this;
         }
 
+        // code() specify the code of a strategy.
         public StrategyBuilder code(String exp) {
             code = programParser.parseAndUnwrap(exp);
             return this;
         }
 
+        // build() build a Strategy.
         public Strategy build() {
             if (code == null) {
                 throw new RuntimeException("Strategy is not fully build: code");

@@ -1,9 +1,8 @@
 package com.tangenta.util;
 
 import com.tangenta.Strategy;
-import com.tangenta.common.Val;
-import com.tangenta.parser.result.Panic;
 import com.tangenta.common.Expr;
+import com.tangenta.parser.result.Panic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +11,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+// Util defines some utilities.
 public class Util {
+
+    // trimHead() remove whitespaces at the beginning or a string.
     public static String trimHead(String origin) {
         for (int i = 0; i < origin.length(); i++) {
             char x = origin.charAt(i);
@@ -22,16 +24,19 @@ public class Util {
         return "";
     }
 
+    // car() fetch the first element of a list.
     public static <T> T car(List<T> lst) {
         if (lst.isEmpty()) throw Panic.msg("Car on empty list");
         return lst.get(0);
     }
 
+    // cdr() fetch all the elements of a list except the first.
     public static <T> List<T> cdr(List<T> lst) {
         if (lst.isEmpty()) throw Panic.msg("Cdr on empty list");
         return lst.stream().skip(1).collect(Collectors.toList());
     }
 
+    // carSym fetch the first Expr in a list and convert it into Expr.Sym.
     public static Expr.Sym carSym(List<Expr> lst) {
         if (lst.isEmpty()) throw Panic.msg("CarSymStr on empty list");
         Expr expr = lst.get(0);
@@ -42,6 +47,7 @@ public class Util {
         }
     }
 
+    // format() format the result of a syntax tree.
     public static String format(Expr result) {
         if (result instanceof Expr.Bool) {
             return ((Expr.Bool) result).value.toString();
@@ -64,6 +70,7 @@ public class Util {
         }
     }
 
+    // format() format the result of a bit war.
     public static String format(List<Tuple<Strategy, Integer>> results) {
         return format(
                 map(results, tup -> Arrays.asList(tup.left.name, tup.right.toString())),
@@ -71,6 +78,7 @@ public class Util {
         );
     }
 
+    // format() format a two-dimensional arrays into a table, with headers.
     public static String format(List<List<String>> content, List<String> headers) {
         // validation
         if (!content.stream().allMatch(l -> l.size() == headers.size())) {
@@ -91,12 +99,14 @@ public class Util {
         }});
     }
 
+    // splitLine() create a table split line.
     private static String splitLine(List<Integer> lens) {
         return wrapAround("+", lens.stream()
                 .map(len -> many('-', len))
                 .collect(Collectors.joining("+")));
     }
 
+    // contentLine() create a table content line.
     private static String contentLine(List<String> contents, List<Integer> maxLens) {
         return wrapAround("|", zip(contents, maxLens).stream().map(tup -> {
             String con = tup.left;
@@ -109,6 +119,7 @@ public class Util {
         }).collect(Collectors.joining("|")));
     }
 
+    // wrapAround() wrap a string around another.
     private static String wrapAround(String content, String body) {
         return content + body + content;
     }
@@ -121,6 +132,7 @@ public class Util {
         return builder.toString();
     }
 
+    // zip() zip two lists into one tuple list with a length of shorter one.
     private static <T, U> List<Tuple<T, U>> zip(List<T> first, List<U> second) {
         int size = Integer.min(first.size(), second.size());
         List<Tuple<T, U>> res = new ArrayList<>(size);
@@ -130,6 +142,7 @@ public class Util {
         return res;
     }
 
+    // maxList() compare integers in two list one by one and take the max one into another list, return it.
     private static List<Integer> maxList(List<Integer> first, List<Integer> second) {
         int size = Integer.min(first.size(), second.size());
         List<Integer> res = new ArrayList<>(size);
@@ -139,10 +152,12 @@ public class Util {
         return res;
     }
 
+    // toLength() convert a list of string into a list of integer based on the length of string.
     private static List<Integer> toLength(List<String> strs) {
         return strs.stream().map(String::length).collect(Collectors.toList());
     }
 
+    // map() map the elements in a list into another with a given function.
     private static <T, R> List<R> map(List<T> origin, Function<T, R> fn) {
         return origin.stream().map(fn).collect(Collectors.toList());
     }

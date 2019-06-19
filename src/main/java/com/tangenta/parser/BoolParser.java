@@ -6,6 +6,7 @@ import com.tangenta.parser.result.ParseSuccess;
 import com.tangenta.common.Expr;
 import com.tangenta.util.Util;
 
+// BoolParse is used to parse a boolean value.
 public class BoolParser implements Parser {
     private BoolParser() {}
 
@@ -23,6 +24,7 @@ public class BoolParser implements Parser {
         }
     }
 
+    // build() create a BoolParser.
     public static BoolParser build() {
         return new BoolParser();
     }

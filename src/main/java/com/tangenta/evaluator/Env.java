@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+// Env is an key-value environment when evaluating Expr.
 public class Env {
     private final Map<Expr.Sym, Val> env;
 
@@ -17,14 +18,17 @@ public class Env {
         this.env = env;
     }
 
+    // set() is used to set a key-value pair.
     public void set(Expr.Sym sym, Val v) {
         env.put(sym, v);
     }
 
+    // get() is used to get a key-value from environment.
     public Val get(Expr.Sym sym) {
         return env.get(sym);
     }
 
+    // standard() defined basic operators and functions for valuating, such as `random`, `car`, 'cdr', etc.
     public static Env standard() {
         Random random = new Random();
 
@@ -123,10 +127,12 @@ public class Env {
         }});
     }
 
+    // create() create an environment from a given map.
     public static Env create(Map<Expr.Sym, Val> env) {
         return new Env(env);
     }
 
+    // expand() create an environment with the old one adding more kv pairs.
     public static Env expand(Env old, Map<Expr.Sym, Val> newEnv) {
         return new Env(new HashMap<Expr.Sym, Val>(){{
             putAll(old.env);

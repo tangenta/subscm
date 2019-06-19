@@ -11,6 +11,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public interface Eval {
+
+    // eval() evaluate an expression under an environment.
     static Val eval(Expr origin, Env env) {
         if (origin instanceof Expr.Sym) {
             Val val = env.get(((Expr.Sym) origin));

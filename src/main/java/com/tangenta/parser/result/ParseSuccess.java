@@ -2,6 +2,7 @@ package com.tangenta.parser.result;
 
 import com.tangenta.common.Expr;
 
+// ParseSuccess represents an parsing success.
 public class ParseSuccess implements ParseResult {
     public final Expr expr;
     public final String restStr;
@@ -11,6 +12,7 @@ public class ParseSuccess implements ParseResult {
         this.restStr = restStr;
     }
 
+    // of() create a ParseSuccess.
     public static ParseSuccess of(Expr expr, String restStr) {
         return new ParseSuccess(expr, restStr);
     }

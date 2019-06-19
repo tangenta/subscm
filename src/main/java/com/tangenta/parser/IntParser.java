@@ -6,6 +6,7 @@ import com.tangenta.parser.result.ParseSuccess;
 import com.tangenta.common.Expr;
 import com.tangenta.util.Util;
 
+// IntParser is used to parse a integer.
 public class IntParser implements Parser {
     private IntParser() {}
 
@@ -28,6 +29,7 @@ public class IntParser implements Parser {
         return ParseSuccess.of(new Expr.Num(Integer.parseInt(result)), trimString.substring(result.length()));
     }
 
+    // build() create IntParser.
     public static IntParser build() {
         return new IntParser();
     }

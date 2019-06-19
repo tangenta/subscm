@@ -3,7 +3,10 @@ package com.tangenta.common;
 import java.util.List;
 import java.util.Objects;
 
+// Expr represent an expression after input string is parsed.
 public interface Expr {
+
+    // Sym is a symbol.
     class Sym implements Expr {
         public final String value;
 
@@ -32,6 +35,7 @@ public interface Expr {
         }
     }
 
+    // Many represents multiple Exprs.
     class ManySym implements Expr {
         public final List<Expr> value;
 
@@ -47,6 +51,7 @@ public interface Expr {
         }
     }
 
+    // Lst is a list of Exprs.
     class Lst implements Expr {
         public final java.util.List<Expr> value;
 
@@ -62,6 +67,7 @@ public interface Expr {
         }
     }
 
+    // Num represents integer.
     class Num implements Expr {
         public final Integer value;
 
@@ -77,6 +83,7 @@ public interface Expr {
         }
     }
 
+    // Nil is an empty Expr.
     class Nil implements Expr {
         private Nil() {}
 
@@ -88,6 +95,7 @@ public interface Expr {
 
     Expr nil = new Nil();
 
+    // Bool represents boolean.
     class Bool implements Expr {
         public final Boolean value;
 

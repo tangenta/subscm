@@ -3,7 +3,10 @@ package com.tangenta.common;
 import java.util.List;
 import java.util.function.Function;
 
+// Val is a value after evaluating an Expr.
 public interface Val {
+
+    // Func represents a function.
     class Func implements Val {
         public final Function<List<Val>, Val> value;
 
@@ -19,6 +22,7 @@ public interface Val {
         }
     }
 
+    // Int represents an integer.
     class Int implements Val {
         public final Integer value;
 
@@ -34,6 +38,7 @@ public interface Val {
         }
     }
 
+    // Bool represents a boolean.
     class Bool implements Val {
         public final Boolean value;
 
@@ -49,6 +54,7 @@ public interface Val {
         }
     }
 
+    // Def is a definition result in a Expr.
     class Def implements Val {
         public final Expr.Sym value;
 
@@ -64,6 +70,7 @@ public interface Val {
         }
     }
 
+    // Lst represents a list of Val.
     class Lst implements Val {
         public final List<Val> value;
 
@@ -79,6 +86,7 @@ public interface Val {
         }
     }
 
+    // Nil is a empty Val.
     class Nil implements Val {
         private Nil() {}
     }

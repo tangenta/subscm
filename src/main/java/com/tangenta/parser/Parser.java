@@ -10,8 +10,13 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+// Parser is used to parse a string into a ParseResult(Expr if success).
 public interface Parser {
+
+    // parse() parse string into ParseResult.
     ParseResult parse(String string);
+
+    // parseAndUnwrap() parse string and throw Panic if an error occurred.
     default Expr parseAndUnwrap(String string) {
         ParseResult parseResult = parse(string);
         if (parseResult instanceof ParseSuccess) {
@@ -22,6 +27,8 @@ public interface Parser {
             throw Panic.msg(((ParseError)parseResult).errMsg);
         }
     }
+
+    // parseAndUnwrapAndMute() parse string and return null if an error occurred.
     default Expr parseUnwrapAndMute(String string) {
         try {
             return parseAndUnwrap(string);
@@ -31,6 +38,7 @@ public interface Parser {
         }
     }
 
+    // of() create a Parser that is used to parse a specific string.
     static Parser of(String match) {
         return string -> {
             String trim = Util.trimHead(string);
@@ -40,6 +48,7 @@ public interface Parser {
         };
     }
 
+    // ignore() create a parser that ignore another parser's result and return a ParseSuccess of Nil.
     static Parser ignore(Parser parser) {
         return string -> {
             ParseResult originRes = parser.parse(string);
@@ -48,6 +57,7 @@ public interface Parser {
         };
     }
 
+    // program() create a parser which can parse a program.
     static Parser program() {
         return string -> {
             ParseResult result = new ManyParser(Parser::expression).parse(string);
@@ -60,6 +70,7 @@ public interface Parser {
         };
     }
 
+    // expression() create a parser which can parse an expression;
     static Parser expression() {
         return alter(new ArrayList<Supplier<Parser>>(){{
             add(IntParser::build);
@@ -69,6 +80,7 @@ public interface Parser {
         }});
     }
 
+    // sList() create a parse which can parse a list.
     static Parser sList() {
         return seq(new ArrayList<Supplier<Parser>>(){{
             add(() -> ignore(of("(")));
@@ -77,14 +89,17 @@ public interface Parser {
         }});
     }
 
+    // alter() compose a list of parsers in an alternative way.
     static Parser alter(List<Supplier<Parser>> parsers) {
         return new AlterParser(parsers);
     }
 
+    // seq() compose a list of parsers in a sequential way.
     static Parser seq(List<Supplier<Parser>> parsers) {
         return new SeqParser(parsers);
     }
 
+    // AlterParser represents an alternative parser.
     class AlterParser implements Parser {
         private List<Supplier<Parser>> parsers;
 
@@ -102,6 +117,7 @@ public interface Parser {
         }
     }
 
+    // SeqParser represents a sequential parser.
     class SeqParser implements Parser {
         private List<Supplier<Parser>> parsers;
 
@@ -130,6 +146,7 @@ public interface Parser {
         }
     }
 
+    // ManyParser compose a list of Parser sequentially, returning ParsePending when parsing.
     class ManyParser implements Parser {
         private final Supplier<Parser> parser;
 
