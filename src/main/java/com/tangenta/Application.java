@@ -26,15 +26,15 @@ public class Application {
         int rounds = checkRound(cmd);
         String fileToParse = checkParseFile(cmd);
 
+        System.out.println();
+
         if (fileNames != null) {
             System.out.println("\nSimulating Bit war...");
             List<Strategy> strategies = fetchStgFromFileNames(fileNames);
             String result = Util.format(Strategy.sortStrategies(strategies, rounds));
             System.out.println(result);
             System.out.println("done\n");
-        }
-
-        if (fileToParse != null) {
+        } else if (fileToParse != null) {
             System.out.println("Parsing input file: " + fileToParse);
             String code = readStrFromFile(fileToParse);
             try {
@@ -43,6 +43,8 @@ public class Application {
             } catch (Panic e) {
                 System.err.println(e.getMessage());
             }
+        } else {
+            new HelpFormatter().printHelp("utility-name", options);
         }
     }
 
@@ -86,7 +88,6 @@ public class Application {
     private static String[] checkFilename(CommandLine cmd) {
         String[] fileNames = cmd.getOptionValues(FILES);
         if (fileNames == null) return null;
-        System.out.println(Arrays.toString(fileNames));
         if (fileNames.length <= 1) {
             System.err.println("Multiple input files is needed");
             System.exit(1);
